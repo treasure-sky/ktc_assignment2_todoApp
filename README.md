@@ -13,6 +13,10 @@ BE 트랙 2번 일정관리 앱 구현 과제입니다.
 | 선택한 일정 수정 | `PUT`    | /api/todos/{todoId} | 요청 body  | 수정 정보    | 200: 정상수정 |
 | 선택한 일정 삭제 | `DELETE` | /api/todos/{todoId} | 요청 param | -        | 200: 정상삭제 |
 
+## ERD
+
+![](https://i.imgur.com/HJ54zCC.png)
+
 ## TODO
 ### Lv 0. API 명세 및 ERD 작성   `필수`
 
@@ -20,8 +24,8 @@ BE 트랙 2번 일정관리 앱 구현 과제입니다.
     - [x]  API명세서는 프로젝트 root(최상위) 경로의 `README.md` 에 작성
 
 
-- [ ]  **ERD 작성하기**
-    - [ ]  ERD는 프로젝트 root(최상위) 경로의 `README.md` 에 첨부
+- [x]  **ERD 작성하기**
+    - [x]  ERD는 프로젝트 root(최상위) 경로의 `README.md` 에 첨부
 
 - [ ]  **SQL 작성하기**
     - [ ]  설치한 데이터베이스(Mysql)에 ERD를 따라 테이블을 생성
