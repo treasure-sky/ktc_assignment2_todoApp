@@ -4,11 +4,20 @@
 
 BE 트랙 2번 일정관리 앱 구현 과제입니다.
 
+## API Specification
+| 기능        | Method   | URL                 | request  | response | 상태코드      |
+|:----------|----------|---------------------|----------|----------|-----------|
+| 일정 생성     | `POST`   | /api/todos          | 요청 body  | 등록정보     | 200: 정상등록 |
+| 전체 일정 조회  | `GET`    | /api/todos          | 요청 param | 다건 응답 정보 | 200: 정상조회 |
+| 선택 일정 조회  | `GET`    | /api/todos/{todoId} | 요청 param | 단건 응답 정보 | 200: 정상조회 |
+| 선택한 일정 수정 | `PUT`    | /api/todos/{todoId} | 요청 body  | 수정 정보    | 200: 정상수정 |
+| 선택한 일정 삭제 | `DELETE` | /api/todos/{todoId} | 요청 param | -        | 200: 정상삭제 |
+
 ## TODO
 ### Lv 0. API 명세 및 ERD 작성   `필수`
 
-- [ ]  **API 명세서 작성하기**
-    - [ ]  API명세서는 프로젝트 root(최상위) 경로의 `README.md` 에 작성
+- [x]  **API 명세서 작성하기**
+    - [x]  API명세서는 프로젝트 root(최상위) 경로의 `README.md` 에 작성
 
 
 - [ ]  **ERD 작성하기**
