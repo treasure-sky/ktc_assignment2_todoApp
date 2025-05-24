@@ -11,4 +11,6 @@ public interface TodoService {
 
     List<TodoResponseDto> getTodos(String writerName, LocalDate updatedAt);
 
+    TodoResponseDto getTodo(Long id);
+
 }

@@ -79,4 +79,19 @@ public class TodoRepositoryImpl implements TodoRepository {
             params.toArray()
         );
     }
+
+    @Override
+    public Todo findById(Long id) {
+        String sql = "SELECT id, content, writer_name, password, created_at, updated_at "
+            + "FROM todo WHERE id = ?";
+
+        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new Todo(
+            rs.getLong("id"),
+            rs.getString("content"),
+            rs.getString("writer_name"),
+            rs.getString("password"),
+            rs.getTimestamp("created_at").toLocalDateTime(),
+            rs.getTimestamp("updated_at").toLocalDateTime()
+        ), id);
+    }
 }

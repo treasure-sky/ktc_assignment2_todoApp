@@ -4,9 +4,9 @@ import dev.jino.todoapp.todo.dto.TodoCreateRequestDto;
 import dev.jino.todoapp.todo.dto.TodoResponseDto;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +34,12 @@ public class TodoController {
         @RequestParam(required = false) String writerName,
         @RequestParam(required = false) LocalDate updatedAt) {
         List<TodoResponseDto> todoResponses = todoService.getTodos(writerName, updatedAt);
-        return ResponseEntity.of(Optional.ofNullable(todoResponses));
+        return ResponseEntity.ok(todoResponses);
+    }
+
+    @GetMapping("/{id}")
+    ResponseEntity<TodoResponseDto> getTodo(@PathVariable Long id) {
+        TodoResponseDto todoResponse = todoService.getTodo(id);
+        return ResponseEntity.ok(todoResponse);
     }
 }

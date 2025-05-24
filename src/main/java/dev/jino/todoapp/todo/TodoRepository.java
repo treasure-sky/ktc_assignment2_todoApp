@@ -10,4 +10,6 @@ public interface TodoRepository {
     List<Todo> findByUpdatedAtOrWriterNameOrderByUpdatedAtDesc(String writerName,
         LocalDate updatedAt);
 
+    Todo findById(Long id);
+
 }

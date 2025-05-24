@@ -54,4 +54,17 @@ public class TodoServiceImpl implements TodoService {
         ).toList();
     }
 
+    @Override
+    public TodoResponseDto getTodo(Long id) {
+        Todo todo = todoRepository.findById(id);
+
+        return new TodoResponseDto(
+            todo.getId(),
+            todo.getContent(),
+            todo.getWriterName(),
+            todo.getCreatedAt(),
+            todo.getUpdatedAt()
+        );
+    }
+
 }
