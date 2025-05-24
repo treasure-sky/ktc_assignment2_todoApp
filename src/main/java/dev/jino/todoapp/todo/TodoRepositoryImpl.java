@@ -66,16 +66,14 @@ public class TodoRepositoryImpl implements TodoRepository {
         sql.append(" ORDER BY updated_at DESC");
 
         return jdbcTemplate.query(sql.toString(),
-            (rs, rowNum) -> {
-                return new Todo(
-                    rs.getLong("id"),
-                    rs.getString("content"),
-                    rs.getString("writer_name"),
-                    rs.getString("password"),
-                    rs.getTimestamp("created_at").toLocalDateTime(),
-                    rs.getTimestamp("updated_at").toLocalDateTime()
-                );
-            },
+            (rs, rowNum) -> new Todo(
+                rs.getLong("id"),
+                rs.getString("content"),
+                rs.getString("writer_name"),
+                rs.getString("password"),
+                rs.getTimestamp("created_at").toLocalDateTime(),
+                rs.getTimestamp("updated_at").toLocalDateTime()
+            ),
             params.toArray()
         );
     }
