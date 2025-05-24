@@ -95,4 +95,11 @@ public class TodoServiceImpl implements TodoService {
         );
     }
 
+    @Override
+    public boolean deleteTodo(Long id, String writerName, String password) {
+        // password 검증은 나중에 추가
+        // 작성자 검증도 나중에 추가
+        return todoRepository.deleteById(id);
+    }
+
 }

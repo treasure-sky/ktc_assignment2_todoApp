@@ -14,4 +14,6 @@ public interface TodoRepository {
 
     Todo update(Todo todo);
 
+    boolean deleteById(Long id);
+
 }

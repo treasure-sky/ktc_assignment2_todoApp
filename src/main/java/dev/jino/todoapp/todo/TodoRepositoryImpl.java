@@ -106,4 +106,11 @@ public class TodoRepositoryImpl implements TodoRepository {
 
         return todo;
     }
+
+    @Override
+    public boolean deleteById(Long id) {
+        String sql = "DELETE FROM todo WHERE id = ?";
+        int deletedRows = jdbcTemplate.update(sql, id);
+        return deletedRows > 0;
+    }
 }
