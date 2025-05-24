@@ -1,6 +1,5 @@
 package dev.jino.todoapp.todo;
 
-import com.fasterxml.jackson.core.TreeCodec;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,15 +10,13 @@ import org.springframework.stereotype.Repository;
 public class TodoRepositoryImpl implements TodoRepository {
 
     private final JdbcTemplate jdbcTemplate;
-    private final TreeCodec treeCodec;
 
-    public TodoRepositoryImpl(JdbcTemplate jdbcTemplate, TreeCodec treeCodec) {
+    public TodoRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        this.treeCodec = treeCodec;
     }
 
     @Override
-    public Todo saveTodo(Todo todo) {
+    public Todo save(Todo todo) {
         String sql = "INSERT INTO todo (content, writer_name, password, created_at, updated_at) "
             + "VALUES (?, ?, ?, ?, ?)";
 

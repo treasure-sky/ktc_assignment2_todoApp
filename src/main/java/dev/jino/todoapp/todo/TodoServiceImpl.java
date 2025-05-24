@@ -28,7 +28,7 @@ public class TodoServiceImpl implements TodoService {
             LocalDateTime.now(),
             LocalDateTime.now() // 초기 생성시 업데이트 시간은 생성시간과 동일
         );
-        Todo saved = todoRepository.saveTodo(newTodo);
+        Todo saved = todoRepository.save(newTodo);
 
         return new TodoResponseDto(
             saved.getId(),

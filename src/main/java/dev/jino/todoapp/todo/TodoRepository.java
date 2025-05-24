@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface TodoRepository {
 
-    Todo saveTodo(Todo todo);
+    Todo save(Todo todo);
 
     List<Todo> findByUpdatedAtOrWriterNameOrderByUpdatedAtDesc(String writerName,
         LocalDate updatedAt);
