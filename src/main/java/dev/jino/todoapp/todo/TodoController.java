@@ -2,10 +2,12 @@ package dev.jino.todoapp.todo;
 
 import dev.jino.todoapp.todo.dto.TodoCreateRequestDto;
 import dev.jino.todoapp.todo.dto.TodoResponseDto;
+import dev.jino.todoapp.todo.dto.TodoUpdateRequestDto;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,4 +44,18 @@ public class TodoController {
         TodoResponseDto todoResponse = todoService.getTodo(id);
         return ResponseEntity.ok(todoResponse);
     }
+
+    @PatchMapping("/{id}")
+    ResponseEntity<TodoResponseDto> updatedTodo(
+        @PathVariable Long id,
+        @RequestBody TodoUpdateRequestDto requestDto) {
+        TodoResponseDto todoResponse = todoService.updateTodo(
+            id,
+            requestDto.getContent(),
+            requestDto.getWriterName(),
+            requestDto.getPassword()
+        );
+        return ResponseEntity.ok(todoResponse);
+    }
+
 }

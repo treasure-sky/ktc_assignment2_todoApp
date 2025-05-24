@@ -1,5 +1,6 @@
 package dev.jino.todoapp.todo;
 
+import com.fasterxml.jackson.core.TreeCodec;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +11,11 @@ import org.springframework.stereotype.Repository;
 public class TodoRepositoryImpl implements TodoRepository {
 
     private final JdbcTemplate jdbcTemplate;
+    private final TreeCodec treeCodec;
 
-    public TodoRepositoryImpl(JdbcTemplate jdbcTemplate) {
+    public TodoRepositoryImpl(JdbcTemplate jdbcTemplate, TreeCodec treeCodec) {
         this.jdbcTemplate = jdbcTemplate;
+        this.treeCodec = treeCodec;
     }
 
     @Override
@@ -91,5 +94,19 @@ public class TodoRepositoryImpl implements TodoRepository {
             rs.getTimestamp("created_at").toLocalDateTime(),
             rs.getTimestamp("updated_at").toLocalDateTime()
         ), id);
+    }
+
+    @Override
+    public Todo update(Todo todo) {
+        String sql = "UPDATE todo SET content = ?, writer_name = ?, updated_at = ? WHERE id = ?";
+
+        jdbcTemplate.update(sql,
+            todo.getContent(),
+            todo.getWriterName(),
+            todo.getUpdatedAt(),
+            todo.getId()
+        );
+
+        return todo;
     }
 }

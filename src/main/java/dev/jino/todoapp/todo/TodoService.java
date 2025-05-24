@@ -13,4 +13,5 @@ public interface TodoService {
 
     TodoResponseDto getTodo(Long id);
 
+    TodoResponseDto updateTodo(Long id, String content, String writerName, String password);
 }

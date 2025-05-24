@@ -67,4 +67,32 @@ public class TodoServiceImpl implements TodoService {
         );
     }
 
+    @Override
+    @Transactional
+    public TodoResponseDto updateTodo(Long id, String content, String writerName, String password) {
+        Todo oldTodo = todoRepository.findById(id);
+
+        // password 검증은 나중에 추가
+        // 작성자 검증도 나중에 추가?
+
+        Todo updatedTodo = new Todo(
+            oldTodo.getId(),
+            content != null ? content : oldTodo.getContent(),
+            writerName != null ? writerName : oldTodo.getWriterName(),
+            oldTodo.getPassword(),
+            oldTodo.getCreatedAt(),
+            LocalDateTime.now()  // 업데이트 시간은 항상 갱신
+        );
+
+        Todo newTodo = todoRepository.update(updatedTodo);
+
+        return new TodoResponseDto(
+            newTodo.getId(),
+            newTodo.getContent(),
+            newTodo.getWriterName(),
+            newTodo.getCreatedAt(),
+            newTodo.getUpdatedAt()
+        );
+    }
+
 }
