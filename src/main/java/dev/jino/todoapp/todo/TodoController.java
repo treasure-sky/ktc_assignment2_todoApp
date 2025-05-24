@@ -2,10 +2,15 @@ package dev.jino.todoapp.todo;
 
 import dev.jino.todoapp.todo.dto.TodoCreateRequestDto;
 import dev.jino.todoapp.todo.dto.TodoResponseDto;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -22,5 +27,13 @@ public class TodoController {
     ResponseEntity<TodoResponseDto> createTodo(@RequestBody TodoCreateRequestDto requestDto) {
         TodoResponseDto todoResponse = todoService.createTodo(requestDto);
         return ResponseEntity.ok(todoResponse);
+    }
+
+    @GetMapping
+    ResponseEntity<List<TodoResponseDto>> getTodos(
+        @RequestParam(required = false) String writerName,
+        @RequestParam(required = false) LocalDate updatedAt) {
+        List<TodoResponseDto> todoResponses = todoService.getTodos(writerName, updatedAt);
+        return ResponseEntity.of(Optional.ofNullable(todoResponses));
     }
 }

@@ -2,7 +2,9 @@ package dev.jino.todoapp.todo;
 
 import dev.jino.todoapp.todo.dto.TodoCreateRequestDto;
 import dev.jino.todoapp.todo.dto.TodoResponseDto;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,4 +38,20 @@ public class TodoServiceImpl implements TodoService {
             saved.getUpdatedAt()
         );
     }
+
+    @Override
+    public List<TodoResponseDto> getTodos(String writerName, LocalDate updatedAt) {
+
+        List<Todo> todos = todoRepository
+            .findByUpdatedAtOrWriterNameOrderByUpdatedAtDesc(writerName, updatedAt);
+
+        return todos.stream().map(todo -> new TodoResponseDto(
+            todo.getId(),
+            todo.getContent(),
+            todo.getWriterName(),
+            todo.getCreatedAt(),
+            todo.getUpdatedAt())
+        ).toList();
+    }
+
 }
