@@ -1,5 +1,7 @@
 package dev.jino.todoapp.todo;
 
+import dev.jino.todoapp.exception.PasswordMismatchException;
+import dev.jino.todoapp.exception.TodoNotFoundException;
 import dev.jino.todoapp.todo.dto.PageResponseDto;
 import dev.jino.todoapp.todo.dto.TodoCreateRequestDto;
 import dev.jino.todoapp.todo.dto.TodoResponseDto;
@@ -8,6 +10,7 @@ import dev.jino.todoapp.writer.WriterRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -91,26 +94,39 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public TodoResponseDto getTodo(Long id) {
-        Todo todo = todoRepository.findById(id);
 
-        Writer writer = writerRepository.findById(todo.getWriterId())
-            .orElseThrow(() -> new IllegalArgumentException("작성자를 찾을 수 없습니다."));
+        try {
+            Todo todo = todoRepository.findById(id);
 
-        return new TodoResponseDto(
-            todo.getId(),
-            todo.getContent(),
-            writer.getName(),
-            todo.getCreatedAt(),
-            todo.getUpdatedAt()
-        );
+            Writer writer = writerRepository.findById(todo.getWriterId())
+                .orElseThrow(() -> new IllegalArgumentException("작성자를 찾을 수 없습니다."));
+
+            return new TodoResponseDto(
+                todo.getId(),
+                todo.getContent(),
+                writer.getName(),
+                todo.getCreatedAt(),
+                todo.getUpdatedAt()
+            );
+        } catch (EmptyResultDataAccessException e) {
+            throw new TodoNotFoundException("ID: " + id + "에 해당하는 일정을 찾을 수 없습니다.");
+        }
     }
 
     @Override
     @Transactional
     public TodoResponseDto updateTodo(Long id, String content, String password) {
-        Todo oldTodo = todoRepository.findById(id);
+        Todo oldTodo;
+        try {
+            oldTodo = todoRepository.findById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new TodoNotFoundException("ID: " + id + "에 해당하는 일정을 찾을 수 없습니다.");
+        }
 
-        // password 검증은 나중에 추가
+        // password 검증
+        if (!oldTodo.getPassword().equals(password)) {
+            throw new PasswordMismatchException("비밀번호가 일치하지 않습니다.");
+        }
 
         Todo updatedTodo = new Todo(
             oldTodo.getId(),
@@ -139,8 +155,18 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public boolean deleteTodo(Long id, String password) {
-        // password 검증은 나중에 추가
-        // 작성자 검증도 나중에 추가
+        Todo todo;
+        try {
+            todo = todoRepository.findById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new TodoNotFoundException("ID " + id + "에 해당하는 일정을 찾을 수 없습니다.");
+        }
+
+        // password 검증
+        if (!todo.getPassword().equals(password)) {
+            throw new PasswordMismatchException("비밀번호가 일치하지 않습니다.");
+        }
+
         return todoRepository.deleteById(id);
     }
 

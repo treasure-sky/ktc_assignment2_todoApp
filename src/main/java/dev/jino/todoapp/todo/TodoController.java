@@ -66,15 +66,8 @@ public class TodoController {
     ResponseEntity<Void> deleteTodo(
         @PathVariable Long id,
         @RequestBody TodoDeleteRequestDto requestDto) {
-        boolean deleted = todoService.deleteTodo(
-            id,
-            requestDto.getPassword()
-        );
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        todoService.deleteTodo(id, requestDto.getPassword());
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/page")
