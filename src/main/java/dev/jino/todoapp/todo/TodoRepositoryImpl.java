@@ -112,4 +112,30 @@ public class TodoRepositoryImpl implements TodoRepository {
         int deletedRows = jdbcTemplate.update(sql, id);
         return deletedRows > 0;
     }
+
+    @Override
+    public List<Todo> findAllWithPagination(int page, int size) {
+        int offset = page * size;
+
+        String sql = "SELECT t.id, t.content, t.password, t.created_at, t.updated_at, t.writer_id "
+            + "FROM todo t ORDER BY t.updated_at DESC LIMIT ? OFFSET ?";
+
+        return jdbcTemplate.query(sql,
+            (rs, rowNum) -> new Todo(
+                rs.getLong("id"),
+                rs.getString("content"),
+                rs.getString("password"),
+                rs.getTimestamp("created_at").toLocalDateTime(),
+                rs.getTimestamp("updated_at").toLocalDateTime(),
+                rs.getLong("writer_id")
+            ),
+            size, offset
+        );
+    }
+
+    @Override
+    public long countAll() {
+        String sql = "SELECT COUNT(*) FROM todo";
+        return jdbcTemplate.queryForObject(sql, Long.class);
+    }
 }

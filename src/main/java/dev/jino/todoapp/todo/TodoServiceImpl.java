@@ -1,5 +1,6 @@
 package dev.jino.todoapp.todo;
 
+import dev.jino.todoapp.todo.dto.PageResponseDto;
 import dev.jino.todoapp.todo.dto.TodoCreateRequestDto;
 import dev.jino.todoapp.todo.dto.TodoResponseDto;
 import dev.jino.todoapp.writer.Writer;
@@ -141,6 +142,40 @@ public class TodoServiceImpl implements TodoService {
         // password 검증은 나중에 추가
         // 작성자 검증도 나중에 추가
         return todoRepository.deleteById(id);
+    }
+
+    @Override
+    public PageResponseDto<TodoResponseDto> getTodosWithPagination(int page, int size) {
+        if (page < 0) {
+            page = 0;
+        }
+        if (size <= 0) {
+            size = 10; // 기본 크기
+        }
+
+        long totalElements = todoRepository.countAll();
+
+        // 범위를 넘어선 페이지 요청 시 빈 배열 반환
+        if (page * size >= totalElements) {
+            return new PageResponseDto<>(List.of(), page, size, totalElements);
+        }
+
+        List<Todo> todos = todoRepository.findAllWithPagination(page, size);
+
+        List<TodoResponseDto> todoResponses = todos.stream().map(todo -> {
+            Writer writer = writerRepository.findById(todo.getWriterId())
+                .orElseThrow(() -> new IllegalArgumentException("작성자를 찾을 수 없습니다."));
+
+            return new TodoResponseDto(
+                todo.getId(),
+                todo.getContent(),
+                writer.getName(),
+                todo.getCreatedAt(),
+                todo.getUpdatedAt()
+            );
+        }).toList();
+
+        return new PageResponseDto<>(todoResponses, page, size, totalElements);
     }
 
 }

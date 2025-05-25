@@ -16,4 +16,8 @@ public interface TodoRepository {
 
     boolean deleteById(Long id);
 
+    List<Todo> findAllWithPagination(int page, int size);
+
+    long countAll();
+
 }

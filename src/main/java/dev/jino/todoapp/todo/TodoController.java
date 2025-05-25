@@ -1,5 +1,6 @@
 package dev.jino.todoapp.todo;
 
+import dev.jino.todoapp.todo.dto.PageResponseDto;
 import dev.jino.todoapp.todo.dto.TodoCreateRequestDto;
 import dev.jino.todoapp.todo.dto.TodoDeleteRequestDto;
 import dev.jino.todoapp.todo.dto.TodoResponseDto;
@@ -74,6 +75,15 @@ public class TodoController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/page")
+    ResponseEntity<PageResponseDto<TodoResponseDto>> getTodosWithPagination(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size) {
+        PageResponseDto<TodoResponseDto> pageResponse = todoService.getTodosWithPagination(page,
+            size);
+        return ResponseEntity.ok(pageResponse);
     }
 
 }
