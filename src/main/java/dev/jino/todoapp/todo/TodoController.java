@@ -66,7 +66,6 @@ public class TodoController {
         @RequestBody TodoDeleteRequestDto requestDto) {
         boolean deleted = todoService.deleteTodo(
             id,
-            requestDto.getWriterName(),
             requestDto.getPassword()
         );
         if (deleted) {

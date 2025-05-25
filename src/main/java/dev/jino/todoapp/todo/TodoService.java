@@ -15,6 +15,6 @@ public interface TodoService {
 
     TodoResponseDto updateTodo(Long id, String content, String writerName, String password);
 
-    boolean deleteTodo(Long id, String writerName, String password);
+    boolean deleteTodo(Long id, String password);
 
 }
