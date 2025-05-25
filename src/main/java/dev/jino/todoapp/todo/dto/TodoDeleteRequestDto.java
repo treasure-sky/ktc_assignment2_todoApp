@@ -5,6 +5,6 @@ import lombok.Getter;
 @Getter
 public class TodoDeleteRequestDto {
 
-    String password;
+    private String password;
 
 }
