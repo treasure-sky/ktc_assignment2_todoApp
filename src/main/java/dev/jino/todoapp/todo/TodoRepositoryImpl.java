@@ -17,15 +17,15 @@ public class TodoRepositoryImpl implements TodoRepository {
 
     @Override
     public Todo save(Todo todo) {
-        String sql = "INSERT INTO todo (content, writer_name, password, created_at, updated_at) "
+        String sql = "INSERT INTO todo (content, password, created_at, updated_at, writer_id) "
             + "VALUES (?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sql,
             todo.getContent(),
-            todo.getWriterName(),
             todo.getPassword(),
             todo.getCreatedAt(),
-            todo.getUpdatedAt()
+            todo.getUpdatedAt(),
+            todo.getWriterId()
         );
 
         // 생성된 id는 db에서 가져옴
@@ -34,28 +34,28 @@ public class TodoRepositoryImpl implements TodoRepository {
         return new Todo(
             id,
             todo.getContent(),
-            todo.getWriterName(),
             todo.getPassword(),
             todo.getCreatedAt(),
-            todo.getUpdatedAt()
+            todo.getUpdatedAt(),
+            todo.getWriterId()
         );
     }
 
     @Override
-    public List<Todo> findByUpdatedAtOrWriterNameOrderByUpdatedAtDesc(String writerName,
+    public List<Todo> findByUpdatedAtOrWriterIdOrderByUpdatedAtDesc(Long writerId,
         LocalDate updatedAt) {
 
         List<String> params = new ArrayList<>();
 
         // 1+1은 AND로 WHERE절을 쉽게 append 하기 위해 추가
         StringBuilder sql = new StringBuilder(
-            "SELECT id, content, writer_name, password, created_at, updated_at "
+            "SELECT id, content, password, created_at, updated_at, writer_id "
                 + "FROM todo WHERE 1=1"
         );
 
-        if (writerName != null && !writerName.isBlank()) {
-            sql.append(" AND writer_name = ?");
-            params.add(writerName);
+        if (writerId != null) {
+            sql.append(" AND writer_id = ?");
+            params.add(writerId.toString());
         }
 
         if (updatedAt != null) {
@@ -69,10 +69,10 @@ public class TodoRepositoryImpl implements TodoRepository {
             (rs, rowNum) -> new Todo(
                 rs.getLong("id"),
                 rs.getString("content"),
-                rs.getString("writer_name"),
                 rs.getString("password"),
                 rs.getTimestamp("created_at").toLocalDateTime(),
-                rs.getTimestamp("updated_at").toLocalDateTime()
+                rs.getTimestamp("updated_at").toLocalDateTime(),
+                rs.getLong("writer_id")
             ),
             params.toArray()
         );
@@ -80,26 +80,25 @@ public class TodoRepositoryImpl implements TodoRepository {
 
     @Override
     public Todo findById(Long id) {
-        String sql = "SELECT id, content, writer_name, password, created_at, updated_at "
+        String sql = "SELECT id, content, password, created_at, updated_at, writer_id "
             + "FROM todo WHERE id = ?";
 
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new Todo(
             rs.getLong("id"),
             rs.getString("content"),
-            rs.getString("writer_name"),
             rs.getString("password"),
             rs.getTimestamp("created_at").toLocalDateTime(),
-            rs.getTimestamp("updated_at").toLocalDateTime()
+            rs.getTimestamp("updated_at").toLocalDateTime(),
+            rs.getLong("writer_id")
         ), id);
     }
 
     @Override
     public Todo update(Todo todo) {
-        String sql = "UPDATE todo SET content = ?, writer_name = ?, updated_at = ? WHERE id = ?";
+        String sql = "UPDATE todo SET content = ?, updated_at = ? WHERE id = ?";
 
         jdbcTemplate.update(sql,
             todo.getContent(),
-            todo.getWriterName(),
             todo.getUpdatedAt(),
             todo.getId()
         );

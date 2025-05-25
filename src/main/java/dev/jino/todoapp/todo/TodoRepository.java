@@ -7,7 +7,7 @@ public interface TodoRepository {
 
     Todo save(Todo todo);
 
-    List<Todo> findByUpdatedAtOrWriterNameOrderByUpdatedAtDesc(String writerName,
+    List<Todo> findByUpdatedAtOrWriterIdOrderByUpdatedAtDesc(Long writerId,
         LocalDate updatedAt);
 
     Todo findById(Long id);

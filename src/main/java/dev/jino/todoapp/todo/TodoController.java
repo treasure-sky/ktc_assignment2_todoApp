@@ -35,9 +35,9 @@ public class TodoController {
 
     @GetMapping
     ResponseEntity<List<TodoResponseDto>> getTodos(
-        @RequestParam(required = false) String writerName,
+        @RequestParam(required = false) Long writerId,
         @RequestParam(required = false) LocalDate updatedAt) {
-        List<TodoResponseDto> todoResponses = todoService.getTodos(writerName, updatedAt);
+        List<TodoResponseDto> todoResponses = todoService.getTodos(writerId, updatedAt);
         return ResponseEntity.ok(todoResponses);
     }
 
@@ -54,7 +54,8 @@ public class TodoController {
         TodoResponseDto todoResponse = todoService.updateTodo(
             id,
             requestDto.getContent(),
-            requestDto.getWriterName(),
+//            Lv3 연관관계 설정으로 writer 수정기능 삭제
+//            requestDto.getWriterName(),
             requestDto.getPassword()
         );
         return ResponseEntity.ok(todoResponse);

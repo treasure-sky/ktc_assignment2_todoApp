@@ -6,6 +6,7 @@ import lombok.Getter;
 public class TodoCreateRequestDto {
 
     private String content;
+    private String email;
     private String writerName;
     private String password;
 

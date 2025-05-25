@@ -9,11 +9,11 @@ public interface TodoService {
 
     TodoResponseDto createTodo(TodoCreateRequestDto requestDto);
 
-    List<TodoResponseDto> getTodos(String writerName, LocalDate updatedAt);
+    List<TodoResponseDto> getTodos(Long writerId, LocalDate updatedAt);
 
     TodoResponseDto getTodo(Long id);
 
-    TodoResponseDto updateTodo(Long id, String content, String writerName, String password);
+    TodoResponseDto updateTodo(Long id, String content, String password);
 
     boolean deleteTodo(Long id, String password);
 
